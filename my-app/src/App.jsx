@@ -8,7 +8,7 @@ import { ThemeContext } from "./store/ThemeContext";
 import { LanguageContext } from "./store/LanguageContext";
 
 import "./App.css";
-import Layout from "./main-layout/layout";
+import Layout from "./main-layout/Layout";
 import AboutPage from "./components/AboutPage";
 import ContactPage from "./components/ContactPage";
 import HomePage from "./components/HomePage";
