@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Тема + CSS-переменные: карточки/акценты сами меняются со сменой темы */
+body.light {
+  background-color: #f4f5f7;
+  color: #1a1a2e;
+  --surface: #ffffff;
+  --surface-2: #f0f1f5;
+  --border: rgba(20, 20, 40, 0.1);
+  --muted: #5b5b76;
+  --accent: #4f46e5;
+  --accent-contrast: #ffffff;
+  --shadow: 0 10px 30px rgba(20, 20, 60, 0.08);
+}
+
+body.dark {
+  background-color: #16161f;
+  color: #e9e9f2;
+  --surface: #1f1f2e;
+  --surface-2: #262636;
+  --border: rgba(255, 255, 255, 0.1);
+  --muted: #a2a2bd;
+  --accent: #8b8bff;
+  --accent-contrast: #16161f;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
