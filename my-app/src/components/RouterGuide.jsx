@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { LanguageContext, translations } from "../store/LanguageContext";
+import { useAppStore } from "../store/useAppStore";
+import { translations } from "../store/Language";
 import { highlight } from "./highlight";
 import "../App.css";
 
@@ -72,7 +72,7 @@ function SvgNavLink() {
 const SVGS = [SvgBrowser, SvgRoutes, SvgOutlet, SvgNavLink];
 
 export default function RouterGuide() {
-  const { lang } = useContext(LanguageContext);
+  const lang = useAppStore((s) => s.lang); // ZUSTAND: подписка на язык из стора
   const t = translations[lang];
 
   return (

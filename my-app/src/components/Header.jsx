@@ -1,14 +1,18 @@
-import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { ThemeContext } from "../store/ThemeContext";
-import { LanguageContext, translations } from "../store/LanguageContext";
+import { useAppStore } from "../store/useAppStore";
+import { translations } from "../store/Language";
 import "../App.css";
 
-// ШАГ 3 + ШАГ 4. Header — «шапка» приложения.
-// Навигация + кнопки смены темы и языка.
+// Header — «шапка» приложения. Навигация + кнопки темы и языка.
+// ZUSTAND: вместо useContext подписываемся на стор селектором useAppStore((s) => s.поле).
+// Каждый селектор берёт ровно один кусок стора — так компонент перерисуется
+// только когда именно это поле изменится.
 export default function Header() {
-  const { theme, setTheme } = useContext(ThemeContext);
-  const { lang, setLang } = useContext(LanguageContext);
+  const theme = useAppStore((s) => s.theme);
+  const lang = useAppStore((s) => s.lang);
+  // Методы стора тоже берём селектором — это обычные функции, дёргаем их в onClick.
+  const toggleTheme = useAppStore((s) => s.toggleTheme);
+  const toggleLang = useAppStore((s) => s.toggleLang);
   const t = translations[lang];
 
   // NavLink сам подставляет класс на активный маршрут
@@ -28,6 +32,16 @@ export default function Header() {
           <NavLink to="/about" className={linkClass}>{t.navAbout}</NavLink>
           <NavLink to="/contact" className={linkClass}>{t.navContact}</NavLink>
           <NavLink to="/router" className={linkClass}>{t.navRouter}</NavLink>
+          <NavLink to="/zustand" className={linkClass}>{t.navZustand}</NavLink>
+          <NavLink to="/i18n" className={linkClass}>{t.navI18n}</NavLink>
+          <a
+            className="nav__link"
+            href="https://preza-react-html-format.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t.slidesLink} ↗
+          </a>
         </nav>
 
         <div className="header__actions">
@@ -35,13 +49,13 @@ export default function Header() {
             className="icon-btn"
             aria-label={theme === "light" ? t.themeToDark : t.themeToLight}
             title={theme === "light" ? t.themeToDark : t.themeToLight}
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            onClick={toggleTheme}
           >
             {theme === "light" ? "🌙" : "☀️"}
           </button>
           <button
             className="icon-btn icon-btn--text"
-            onClick={() => setLang(lang === "ru" ? "en" : "ru")}
+            onClick={toggleLang}
           >
             {lang === "ru" ? "EN" : "RU"}
           </button>

@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { LanguageContext, translations } from "../store/LanguageContext";
+import { useAppStore } from "../store/useAppStore";
+import { translations } from "../store/Language";
 import "../App.css";
 
 export default function AboutPage() {
-  const { lang } = useContext(LanguageContext);
+  const lang = useAppStore((s) => s.lang); // ZUSTAND: подписка на язык из стора
   const t = translations[lang];
 
   return (

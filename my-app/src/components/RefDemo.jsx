@@ -1,11 +1,12 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { LanguageContext, translations } from "../store/LanguageContext";
+import { useEffect, useRef, useState } from "react";
+import { useAppStore } from "../store/useAppStore";
+import { translations } from "../store/Language";
 
 // ШАГ 6. useRef — две классические задачи:
 // 1) доступ к DOM-элементу (автофокус на input);
 // 2) «коробка» для данных, изменение которых НЕ должно вызывать ререндер.
 export default function RefDemo() {
-  const { lang } = useContext(LanguageContext);
+  const lang = useAppStore((s) => s.lang); // ZUSTAND: подписка на язык из стора
   const t = translations[lang];
 
   // Ссылка на DOM-элемент. После рендера React положит

@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
-import { LanguageContext, translations } from "../store/LanguageContext";
+import { useState } from "react";
+import { useAppStore } from "../store/useAppStore";
+import { translations } from "../store/Language";
 
 // ШАГ 2. Счётчик — первый компонент со своим state.
 export default function Counter() {
@@ -8,7 +9,7 @@ export default function Counter() {
   // Обычная переменная (let count = 0) так не работает — React о ней не знает.
   const [count, setCount] = useState(0);
 
-  const { lang } = useContext(LanguageContext);
+  const lang = useAppStore((s) => s.lang); // ZUSTAND: подписка на язык из стора
   const t = translations[lang];
 
   return (

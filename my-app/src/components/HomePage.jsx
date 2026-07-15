@@ -1,12 +1,12 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import Counter from "./Counter";
 import RefDemo from "./RefDemo";
-import { LanguageContext, translations } from "../store/LanguageContext";
+import { useAppStore } from "../store/useAppStore";
+import { translations } from "../store/Language";
 import "../App.css";
 
 export default function HomePage() {
-  const { lang } = useContext(LanguageContext);
+  const lang = useAppStore((s) => s.lang); // ZUSTAND: подписка на язык из стора
   const t = translations[lang];
 
   return (
