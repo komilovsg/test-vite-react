@@ -441,6 +441,10 @@ export const useAppStore = create(
       titlePlaceholder: "Например: выучить Zustand",
       add: "Добавить",
 
+      // Дашборд
+      createCardTitle: "Создать новую задачу",
+      settingsHint: "Выберите тему приложения",
+
       // Настройки
       settingsTitle: "Настройки",
       currentTheme: "Текущая тема",

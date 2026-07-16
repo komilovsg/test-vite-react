@@ -527,6 +527,9 @@
 
 /* ===== Todo Manager (практическая работа №1) ===== */
 
+/* Страница демо: меньше вертикальных отступов, чем у обычных .page */
+.todo-page { gap: 24px; padding-top: 28px; }
+
 /* Баннер на главной */
 .todo-promo {
   display: flex;
@@ -538,62 +541,99 @@
 }
 .todo-promo .card__text { max-width: 620px; margin: 0; }
 
-/* Подменю демо */
-.todo-tabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 6px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-}
-.todo-tab {
-  padding: 8px 16px;
-  border-radius: 10px;
-  text-decoration: none;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 14px;
-  transition: background 0.2s, color 0.2s;
-}
-.todo-tab:hover { color: inherit; }
-.todo-tab.is-active {
-  background: var(--accent);
-  color: var(--accent-contrast);
-}
-
-/* Список */
-.todo-head {
+/* Панель: вкладки слева + счётчик справа */
+.todo-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
-.todo-counter {
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  font-size: 13px;
+.todo-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.todo-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--muted);
   font-weight: 600;
-  color: var(--muted);
+  font-size: 15px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, background 0.2s;
 }
-.todo-filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.todo-chip {
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
+.todo-tab:hover { color: inherit; background: var(--surface-2); }
+.todo-tab.is-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  border-radius: 10px 10px 0 0;
+}
+.todo-tab__icon { font-size: 16px; line-height: 1; opacity: 0.9; }
+
+.todo-counter {
+  font-size: 15px;
   color: var(--muted);
-  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.todo-counter strong { color: var(--accent); font-weight: 700; }
+
+/* Дашборд: слева список, справа форма + настройки */
+.todo-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.todo-panel { padding: 22px; }
+.todo-side { display: flex; flex-direction: column; gap: 24px; }
+.todo-card__title { margin: 0 0 16px; font-size: 20px; font-weight: 700; }
+
+/* Быстрая форма создания */
+.todo-add { display: flex; gap: 12px; flex-wrap: wrap; }
+.todo-add input {
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: inherit;
+  font-size: 15px;
+}
+.todo-add input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.todo-add .btn { padding: 12px 24px; }
+.todo-more {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.todo-more:hover { text-decoration: underline; }
+
+/* Фильтры */
+.todo-filters { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.todo-chip {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
-.todo-chip:hover { border-color: var(--accent); }
+.todo-chip:hover { color: inherit; }
 .todo-chip.is-active {
   background: var(--accent);
   border-color: var(--accent);
@@ -602,9 +642,9 @@
 
 .todo-empty {
   text-align: center;
-  padding: 48px 24px;
+  padding: 44px 24px;
   border: 1px dashed var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   color: var(--muted);
   display: flex;
   flex-direction: column;
@@ -612,32 +652,38 @@
   gap: 16px;
 }
 
+/* Список задач */
 .todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .todo-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 16px;
-  background: var(--surface);
+  padding: 14px 18px;
+  background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: var(--shadow);
   animation: todoIn 0.25s ease;
 }
 .todo-item__main {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
   flex: 1;
   min-width: 0;
 }
-.todo-item__main input { width: 18px; height: 18px; accent-color: var(--accent); flex-shrink: 0; }
-.todo-item__text { word-break: break-word; }
+.todo-item__main input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.todo-item__text { font-size: 15px; word-break: break-word; }
 .todo-item.is-done .todo-item__text { text-decoration: line-through; color: var(--muted); }
-.todo-item__meta { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.todo-item__meta time { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.todo-item__meta { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.todo-item__meta time { font-size: 13px; color: var(--muted); white-space: nowrap; }
 .todo-del {
   border: none;
   background: transparent;
@@ -656,24 +702,54 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Форма */
+/* Отдельные страницы create/settings (через вкладки) */
 .todo-form { display: flex; flex-direction: column; gap: 16px; max-width: 480px; }
 .todo-field { display: flex; flex-direction: column; gap: 8px; font-weight: 600; }
 .todo-field input {
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-2);
   color: inherit;
   font-size: 15px;
 }
 .todo-field input:focus { outline: none; border-color: var(--accent); }
-.todo-form .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.todo-form .btn:disabled,
+.todo-add .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Настройки */
 .todo-settings { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; max-width: 420px; }
-.todo-settings__hint { color: var(--muted); margin: 0; }
+.todo-settings__hint { color: var(--muted); margin: 0 0 4px; font-size: 15px; }
 
 /* Список требований */
 .todo-req { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; color: var(--muted); }
 .todo-req li { line-height: 1.5; }
+
+/* ===== Адаптив: планшет и телефон ===== */
+
+/* Планшет — дашборд в одну колонку, форма/настройки уходят вниз */
+@media (max-width: 900px) {
+  .todo-grid { grid-template-columns: 1fr; }
+  .todo-side { flex-direction: row; flex-wrap: wrap; }
+  .todo-side > .card { flex: 1; min-width: 260px; }
+}
+
+/* Навигация в шапке переносится, а не обрезается */
+@media (max-width: 860px) {
+  .header__inner { flex-wrap: wrap; }
+  .nav { flex-wrap: wrap; margin-left: 0; width: 100%; order: 3; justify-content: center; }
+}
+
+/* Телефон */
+@media (max-width: 620px) {
+  .page { padding: 28px 16px 56px; gap: 36px; }
+  .todo-side { flex-direction: column; }
+  .todo-bar { justify-content: center; }
+  .todo-counter { width: 100%; text-align: center; }
+  .todo-tabs { width: 100%; justify-content: center; }
+  .todo-tab { padding: 8px 12px; font-size: 14px; }
+  .todo-item { flex-wrap: wrap; gap: 8px; padding: 12px 14px; }
+  .todo-item__meta { width: 100%; justify-content: space-between; padding-left: 34px; }
+  .todo-add { flex-direction: column; }
+  .todo-add .btn { width: 100%; justify-content: center; }
+  .todo-promo { flex-direction: column; align-items: flex-start; }
+}

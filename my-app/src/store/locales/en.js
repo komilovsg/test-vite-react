@@ -441,6 +441,10 @@ export const useAppStore = create(
       titlePlaceholder: "e.g. learn Zustand",
       add: "Add",
 
+      // Dashboard
+      createCardTitle: "Create a new task",
+      settingsHint: "Choose the app theme",
+
       // Settings
       settingsTitle: "Settings",
       currentTheme: "Current theme",
