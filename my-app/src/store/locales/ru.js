@@ -17,6 +17,7 @@ export default {
     navRouter: "Router",
     navZustand: "Zustand",
     navI18n: "i18n",
+    navTodo: "Todo",
 
     routerTitle: "React Router — по шагам",
     routerLead:
@@ -290,4 +291,152 @@ t("nav.home");`,
     contactMessage: "Сообщение",
     contactSend: "Отправить",
     contactSent: "Спасибо! Сообщение отправлено.",
+
+    todo: {
+      badge: "Практическая работа №1",
+      // Баннер на главной
+      promoTitle: "Todo Manager — React + Zustand",
+      promoText:
+        "Практическая работа №1: живое демо + пошаговая инструкция, как собрать её самому. Задачи, фильтры, счётчик и переключение темы через глобальный стор.",
+      promoCta: "Открыть практическую",
+
+      // Страница задания
+      guideTitle: "Todo Manager (React + Zustand)",
+      guideLead:
+        "Цель — закрепить React Router и Zustand: хранить и менять глобальное состояние без useContext. Ниже — рабочее демо (кликай и смотри) и шаги, как собрать его с нуля.",
+      openDemo: "Открыть демо",
+      guideOutro: "Собери сам по шагам выше — или потыкай готовое демо и подсмотри код в src/todo и src/store.",
+
+      reqTitle: "Что нужно сделать",
+      requirements: [
+        "Zustand-стор: список задач + текущая тема (light / dark).",
+        "Страница списка задач (/) — главная.",
+        "Страница создания задачи (/create) — форма с одним полем.",
+        "Страница настроек (/settings) — кнопка «Сменить тему».",
+        "React Router: Routes, Route, Link, NavLink, useNavigate.",
+        "Никакого useContext и передачи данных через props.",
+        "Бонус: localStorage, фильтры, счётчик, дата создания, анимации.",
+      ],
+
+      stepsTitle: "Как собрать — по шагам",
+      steps: [
+        {
+          n: "01",
+          title: "Стор задач в Zustand",
+          text: "Добавляем в стор массив todos и методы добавления, переключения и удаления. crypto.randomUUID() даёт id, дату кладём в createdAt.",
+          code: `// store/useAppStore.js
+export const useAppStore = create((set) => ({
+  theme: "light",
+  todos: [],
+  addTodo: (title) => set((s) => ({
+    todos: [
+      { id: crypto.randomUUID(), title, done: false,
+        createdAt: new Date().toISOString() },
+      ...s.todos,
+    ],
+  })),
+  toggleTodo: (id) => set((s) => ({
+    todos: s.todos.map((t) =>
+      t.id === id ? { ...t, done: !t.done } : t),
+  })),
+  removeTodo: (id) => set((s) => ({
+    todos: s.todos.filter((t) => t.id !== id),
+  })),
+}));`,
+        },
+        {
+          n: "02",
+          title: "Маршруты приложения",
+          text: "Routes + Route задают три страницы. Вложенный Layout с Outlet держит общее подменю (NavLink) над страницами.",
+          code: `// App.jsx
+<Route path="/todo/app" element={<TodoLayout />}>
+  <Route index element={<TodoList />} />
+  <Route path="create" element={<TodoCreate />} />
+  <Route path="settings" element={<TodoSettings />} />
+</Route>`,
+        },
+        {
+          n: "03",
+          title: "Список + фильтр + счётчик",
+          text: "Компонент подписывается на todos и filter из стора. Считаем выполненные, фильтруем видимые, чекбокс дёргает toggleTodo, крестик — removeTodo.",
+          code: `const todos = useAppStore((s) => s.todos);
+const filter = useAppStore((s) => s.filter);
+const toggleTodo = useAppStore((s) => s.toggleTodo);
+
+const doneCount = todos.filter((t) => t.done).length;
+const visible = todos.filter((t) =>
+  filter === "active" ? !t.done
+  : filter === "done" ? t.done
+  : true);`,
+        },
+        {
+          n: "04",
+          title: "Форма + useNavigate",
+          text: "Поле хранит локальный useState. По сабмиту сохраняем задачу в стор и через useNavigate уводим пользователя на список.",
+          code: `const addTodo = useAppStore((s) => s.addTodo);
+const [title, setTitle] = useState("");
+const navigate = useNavigate();
+
+const onSubmit = (e) => {
+  e.preventDefault();
+  if (!title.trim()) return;
+  addTodo(title.trim());
+  navigate("/todo/app"); // редирект на главную
+};`,
+        },
+        {
+          n: "05",
+          title: "Настройки: смена темы",
+          text: "Кнопка дёргает toggleTheme из стора. Тема — глобальное поле, поэтому меняется мгновенно во всём приложении (body красит useEffect в App.jsx).",
+          code: `const theme = useAppStore((s) => s.theme);
+const toggleTheme = useAppStore((s) => s.toggleTheme);
+
+<button onClick={toggleTheme}>
+  Сменить тему ({theme})
+</button>`,
+        },
+        {
+          n: "06",
+          title: "Бонус: localStorage",
+          text: "Middleware persist из zustand сам сохраняет стор в localStorage — задачи и тема переживают перезагрузку. Одна обёртка вокруг create().",
+          code: `import { persist } from "zustand/middleware";
+
+export const useAppStore = create(
+  persist(
+    (set) => ({ /* ...стор... */ }),
+    { name: "app-store" } // ключ в localStorage
+  )
+);`,
+        },
+      ],
+
+      // Демо: подменю
+      tabList: "Список",
+      tabCreate: "Создать",
+      tabSettings: "Настройки",
+
+      // Список
+      listTitle: "Мои задачи",
+      doneLabel: "выполнено",
+      filterAll: "Все",
+      filterActive: "Активные",
+      filterDone: "Выполненные",
+      empty: "Пока пусто. Добавь первую задачу.",
+      addFirst: "Добавить задачу",
+      delete: "Удалить",
+
+      // Создание
+      createTitle: "Новая задача",
+      titleLabel: "Название задачи",
+      titlePlaceholder: "Например: выучить Zustand",
+      add: "Добавить",
+
+      // Настройки
+      settingsTitle: "Настройки",
+      currentTheme: "Текущая тема",
+      themeLight: "светлая",
+      themeDark: "тёмная",
+      toggleTheme: "Сменить тему",
+      totalTasks: "Всего задач",
+    },
 };

@@ -34,6 +34,7 @@ export default function Header() {
           <NavLink to="/router" className={linkClass}>{t.navRouter}</NavLink>
           <NavLink to="/zustand" className={linkClass}>{t.navZustand}</NavLink>
           <NavLink to="/i18n" className={linkClass}>{t.navI18n}</NavLink>
+          <NavLink to="/todo" className={linkClass}>{t.navTodo}</NavLink>
           <a
             className="nav__link"
             href="https://preza-react-html-format.vercel.app/"

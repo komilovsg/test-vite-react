@@ -10,6 +10,11 @@ import HomePage from "./components/HomePage";
 import RouterGuide from "./components/RouterGuide";
 import ZustandGuide from "./components/ZustandGuide";
 import I18nGuide from "./components/I18nGuide";
+import TodoGuide from "./todo/TodoGuide";
+import TodoLayout from "./todo/TodoLayout";
+import TodoList from "./todo/TodoList";
+import TodoCreate from "./todo/TodoCreate";
+import TodoSettings from "./todo/TodoSettings";
 
 // App — корневой компонент, «каркас» приложения.
 // РАНЬШЕ здесь жили useState(theme/lang) и два Context.Provider.
@@ -34,6 +39,12 @@ function App() {
         <Route path="/router" element={<RouterGuide />} />
         <Route path="/zustand" element={<ZustandGuide />} />
         <Route path="/i18n" element={<I18nGuide />} />
+        <Route path="/todo" element={<TodoGuide />} />
+        <Route path="/todo/app" element={<TodoLayout />}>
+          <Route index element={<TodoList />} />
+          <Route path="create" element={<TodoCreate />} />
+          <Route path="settings" element={<TodoSettings />} />
+        </Route>
       </Route>
     </Routes>
   );

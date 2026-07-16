@@ -521,3 +521,156 @@
   .brand__text { display: none; }
   .nav__link { padding: 8px 10px; }
 }
+
+/* ===== Todo Manager (практическая работа №1) ===== */
+
+/* Баннер на главной */
+.todo-promo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  border: 1px solid var(--accent);
+}
+.todo-promo .card__text { max-width: 620px; margin: 0; }
+
+/* Подменю демо */
+.todo-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.todo-tab {
+  padding: 8px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s, color 0.2s;
+}
+.todo-tab:hover { color: inherit; }
+.todo-tab.is-active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Список */
+.todo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.todo-counter {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.todo-filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.todo-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.todo-chip:hover { border-color: var(--accent); }
+.todo-chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.todo-empty {
+  text-align: center;
+  padding: 48px 24px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  animation: todoIn 0.25s ease;
+}
+.todo-item__main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+.todo-item__main input { width: 18px; height: 18px; accent-color: var(--accent); flex-shrink: 0; }
+.todo-item__text { word-break: break-word; }
+.todo-item.is-done .todo-item__text { text-decoration: line-through; color: var(--muted); }
+.todo-item__meta { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.todo-item__meta time { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.todo-del {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+.todo-del:hover { color: #ef4444; background: color-mix(in srgb, #ef4444 12%, transparent); }
+
+@keyframes todoIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Форма */
+.todo-form { display: flex; flex-direction: column; gap: 16px; max-width: 480px; }
+.todo-field { display: flex; flex-direction: column; gap: 8px; font-weight: 600; }
+.todo-field input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: inherit;
+  font-size: 15px;
+}
+.todo-field input:focus { outline: none; border-color: var(--accent); }
+.todo-form .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Настройки */
+.todo-settings { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; max-width: 420px; }
+.todo-settings__hint { color: var(--muted); margin: 0; }
+
+/* Список требований */
+.todo-req { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; color: var(--muted); }
+.todo-req li { line-height: 1.5; }

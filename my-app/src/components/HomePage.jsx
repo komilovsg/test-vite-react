@@ -22,6 +22,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Практическая работа №1 — заметный баннер для студентов */}
+      <section className="section">
+        <div className="card todo-promo">
+          <div>
+            <span className="badge">{t.todo.badge}</span>
+            <h2 className="section__title" style={{ margin: "10px 0 6px" }}>
+              {t.todo.promoTitle}
+            </h2>
+            <p className="card__text">{t.todo.promoText}</p>
+          </div>
+          <Link to="/todo" className="btn btn--primary">{t.todo.promoCta} →</Link>
+        </div>
+      </section>
+
       {/* Features */}
       <section className="section">
         <h2 className="section__title">{t.featuresTitle}</h2>
