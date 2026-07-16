@@ -305,7 +305,7 @@ t("nav.home");`,
       guideLead:
         "Goal — practice React Router and Zustand: store and change global state without useContext. Below is a working demo (click and see) and the steps to build it from scratch.",
       openDemo: "Open demo",
-      guideOutro: "Build it yourself with the steps above — or play with the demo and peek at the code in src/todo and src/store.",
+      guideOutro: "Build it yourself with the steps above — the comment hints will help. The live demo is right here so you can see how it should work.",
 
       reqTitle: "What to build",
       requirements: [
@@ -318,93 +318,103 @@ t("nav.home");`,
         "Bonus: localStorage, filters, counter, created date, animations.",
       ],
 
-      stepsTitle: "How to build — step by step",
+      stepsTitle: "How to build — step by step (fill in the blanks)",
       steps: [
         {
           n: "01",
           title: "Task store in Zustand",
-          text: "Add a todos array plus add/toggle/remove methods to the store. crypto.randomUUID() gives an id, the date goes into createdAt.",
+          text: "Add a todos array and three methods to the store. Hints are in the comments — write the logic yourself.",
           code: `// store/useAppStore.js
+import { create } from "zustand";
+
 export const useAppStore = create((set) => ({
   theme: "light",
-  todos: [],
+  todos: [],       // tasks: { id, title, done, createdAt }
+  filter: "all",   // all | active | done
+
   addTodo: (title) => set((s) => ({
-    todos: [
-      { id: crypto.randomUUID(), title, done: false,
-        createdAt: new Date().toISOString() },
-      ...s.todos,
-    ],
+    // TODO: return a new todos — new task at the front
+    // task = { id: crypto.randomUUID(), title, done: false, createdAt: ... }
+    // don't forget ...s.todos
   })),
+
   toggleTodo: (id) => set((s) => ({
-    todos: s.todos.map((t) =>
-      t.id === id ? { ...t, done: !t.done } : t),
+    // TODO: s.todos.map(...) — flip done on the task with this id
   })),
+
   removeTodo: (id) => set((s) => ({
-    todos: s.todos.filter((t) => t.id !== id),
+    // TODO: s.todos.filter(...) — drop the task with this id
   })),
+
+  setFilter: (filter) => set({ filter }),
 }));`,
         },
         {
           n: "02",
           title: "App routes",
-          text: "Routes + Route define the three pages. A nested Layout with Outlet holds the shared sub-nav (NavLink) above the pages.",
+          text: "Inside the nested Layout, declare the three routes. Fill in the element for each.",
           code: `// App.jsx
 <Route path="/todo/app" element={<TodoLayout />}>
-  <Route index element={<TodoList />} />
-  <Route path="create" element={<TodoCreate />} />
-  <Route path="settings" element={<TodoSettings />} />
+  {/* TODO: index route  → element={<TodoList />} */}
+  {/* TODO: path="create"   → element={<TodoCreate />} */}
+  {/* TODO: path="settings" → element={<TodoSettings />} */}
 </Route>`,
         },
         {
           n: "03",
           title: "List + filter + counter",
-          text: "The component subscribes to todos and filter from the store. Count the done ones, filter the visible ones; the checkbox calls toggleTodo, the cross calls removeTodo.",
+          text: "Subscribe to the store with selectors. Count the done ones and filter the visible ones.",
           code: `const todos = useAppStore((s) => s.todos);
 const filter = useAppStore((s) => s.filter);
 const toggleTodo = useAppStore((s) => s.toggleTodo);
+const removeTodo = useAppStore((s) => s.removeTodo);
 
-const doneCount = todos.filter((t) => t.done).length;
-const visible = todos.filter((t) =>
-  filter === "active" ? !t.done
-  : filter === "done" ? t.done
-  : true);`,
+// TODO: doneCount — how many tasks have done === true
+const doneCount = /* ... */;
+
+// TODO: visible — filter todos by filter (all/active/done)
+const visible = /* ... */;
+
+// in JSX: <input type="checkbox" onChange={() => toggleTodo(t.id)} />
+//         <button onClick={() => removeTodo(t.id)}>✕</button>`,
         },
         {
           n: "04",
           title: "Form + useNavigate",
-          text: "The field keeps local useState. On submit we save the task to the store and use useNavigate to send the user to the list.",
+          text: "The field is local useState. On submit, save the task and redirect to the list.",
           code: `const addTodo = useAppStore((s) => s.addTodo);
 const [title, setTitle] = useState("");
 const navigate = useNavigate();
 
 const onSubmit = (e) => {
   e.preventDefault();
-  if (!title.trim()) return;
-  addTodo(title.trim());
-  navigate("/todo/app"); // redirect to the list
+  // TODO: if title is empty (trim) — return, do nothing
+  // TODO: addTodo(title)
+  // TODO: navigate("/todo/app") — redirect to the list
 };`,
         },
         {
           n: "05",
           title: "Settings: toggle theme",
-          text: "The button calls toggleTheme from the store. Theme is a global field, so it changes instantly across the whole app (a useEffect in App.jsx paints the body).",
+          text: "The button calls toggleTheme from the store. Theme is global — it changes across the whole app.",
           code: `const theme = useAppStore((s) => s.theme);
 const toggleTheme = useAppStore((s) => s.toggleTheme);
 
-<button onClick={toggleTheme}>
+// TODO: button, onClick={toggleTheme}
+<button /* ... */>
   Toggle theme ({theme})
 </button>`,
         },
         {
           n: "06",
           title: "Bonus: localStorage",
-          text: "The persist middleware from zustand saves the store to localStorage on its own — tasks and theme survive a reload. One wrapper around create().",
+          text: "Wrap create() in persist from zustand — the store saves itself to localStorage.",
           code: `import { persist } from "zustand/middleware";
 
 export const useAppStore = create(
   persist(
-    (set) => ({ /* ...store... */ }),
-    { name: "app-store" } // localStorage key
+    (set) => ({ /* ...your store... */ }),
+    { name: "app-store" } // TODO: localStorage key
   )
 );`,
         },

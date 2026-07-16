@@ -43,11 +43,9 @@ export default function TodoGuide() {
               </div>
             </div>
             {s.code && (
-              <div className="guide-step__body">
-                <pre className="code"><code
-                  dangerouslySetInnerHTML={{ __html: highlight(s.code) }}
-                /></pre>
-              </div>
+              <pre className="code guide-code"><code
+                dangerouslySetInnerHTML={{ __html: highlight(s.code) }}
+              /></pre>
             )}
           </article>
         ))}
