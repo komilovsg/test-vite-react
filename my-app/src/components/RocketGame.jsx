@@ -41,8 +41,21 @@ export default function RocketGame() {
   const [level, setLevel] = useState(1);
   const [time, setTime] = useState(0); // секунд продержался
   const [board, setBoard] = useState({ top: loadScores(), place: 0 });
+  const [isFs, setIsFs] = useState(false);
 
   const g = useRef(null);
+
+  // разворот игры на весь экран — нативный Fullscreen API
+  const toggleFs = () => {
+    const el = areaRef.current;
+    if (!document.fullscreenElement) el?.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  };
+  useEffect(() => {
+    const onFs = () => setIsFs(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFs);
+    return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
 
   const start = () => {
     const el = areaRef.current;
@@ -199,6 +212,15 @@ export default function RocketGame() {
           <span>⏱ {fmt(time)}</span>
           <span>Уровень: {level}</span>
         </div>
+
+        <button
+          className={styles.fsBtn}
+          onClick={toggleFs}
+          aria-label={isFs ? "Свернуть" : "На весь экран"}
+          title={isFs ? "Свернуть" : "На весь экран"}
+        >
+          {isFs ? "🗗" : "⛶"}
+        </button>
 
         {status === "playing" && st && (
           <>
