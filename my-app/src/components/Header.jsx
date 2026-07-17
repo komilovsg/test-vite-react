@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAppStore } from "../store/useAppStore";
 import { translations } from "../store/Language";
@@ -26,8 +26,25 @@ export default function Header() {
   const toggleLang = useAppStore((s) => s.toggleLang);
   const t = translations[lang];
 
-  // open — открыта ли шторка. Закрываем при клике по ссылке и по фону.
+  // open — открыта ли шторка. Закрываем по клику вне меню и по Escape.
   const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // header имеет backdrop-filter → он containing block для fixed, поэтому
+  // прозрачный оверлей не покрывал сайт. Надёжнее — слушатель на документе.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setOpen(false);
+    };
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   const linkClass = ({ isActive }) =>
     isActive ? "nav__link is-active" : "nav__link";
@@ -42,7 +59,7 @@ export default function Header() {
 
         <div className="header__actions">
           {/* Кнопка-шторка со списком всех страниц */}
-          <div className="menu">
+          <div className="menu" ref={menuRef}>
             <button
               className="icon-btn"
               aria-label={t.menu}
@@ -54,36 +71,28 @@ export default function Header() {
             </button>
 
             {open && (
-              <>
-                {/* невидимый фон: клик мимо — закрыть */}
-                <button
-                  className="menu__backdrop"
-                  aria-label="close menu"
-                  onClick={() => setOpen(false)}
-                />
-                <nav className="menu__panel">
-                  {NAV.map((item) => (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      end={item.end}
-                      className={linkClass}
-                      onClick={() => setOpen(false)}
-                    >
-                      {t[item.key]}
-                    </NavLink>
-                  ))}
-                  <a
-                    className="nav__link"
-                    href="https://preza-react-html-format.vercel.app/"
-                    target="_blank"
-                    rel="noreferrer"
+              <nav className="menu__panel">
+                {NAV.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    className={linkClass}
                     onClick={() => setOpen(false)}
                   >
-                    {t.slidesLink} ↗
-                  </a>
-                </nav>
-              </>
+                    {t[item.key]}
+                  </NavLink>
+                ))}
+                <a
+                  className="nav__link"
+                  href="https://preza-react-html-format.vercel.app/"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setOpen(false)}
+                >
+                  {t.slidesLink} ↗
+                </a>
+              </nav>
             )}
           </div>
 

@@ -13,6 +13,25 @@ const ROCKET = 34;
 const GAP_H = 140;
 const OBST_W = 46;
 const STAR = 26;
+const LS_KEY = "rocket-run-scores";
+
+// таблица рекордов в localStorage: сортировка по очкам, потом по времени
+function loadScores() {
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+function saveScore(entry) {
+  const list = [...loadScores(), entry].sort(
+    (a, b) => b.score - a.score || b.time - a.time
+  );
+  const top = list.slice(0, 10);
+  localStorage.setItem(LS_KEY, JSON.stringify(top));
+  return { top, place: top.indexOf(entry) + 1 }; // 0 если не попал в топ-10
+}
+const fmt = (s) => `${s.toFixed(1)}с`;
 
 export default function RocketGame() {
   const areaRef = useRef(null);
@@ -20,6 +39,8 @@ export default function RocketGame() {
   const [status, setStatus] = useState("ready"); // ready | playing | over
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
+  const [time, setTime] = useState(0); // секунд продержался
+  const [board, setBoard] = useState({ top: loadScores(), place: 0 });
 
   const g = useRef(null);
 
@@ -37,9 +58,11 @@ export default function RocketGame() {
       stars: [],
       spawnX: 0,
       raf: 0,
+      start: Date.now(),
     };
     setScore(0);
     setLevel(1);
+    setTime(0);
     setStatus("playing");
   };
 
@@ -48,11 +71,24 @@ export default function RocketGame() {
     const area = areaRef.current;
     let scoreLocal = 0;
 
+    // конец забега: считаем время, пишем в таблицу рекордов, показываем место
+    const finish = () => {
+      const secs = (Date.now() - g.current.start) / 1000;
+      const { top, place } = saveScore({ score: scoreLocal, time: secs, date: Date.now() });
+      setTime(secs);
+      setBoard({ top, place });
+      setStatus("over");
+      toast.error(
+        place ? `Разбились! Счёт ${scoreLocal}, ${fmt(secs)} — место #${place}` : `Разбились! Счёт ${scoreLocal}`
+      );
+    };
+
     const loop = () => {
       const W = area.clientWidth;
       const H = area.clientHeight;
       const st = g.current;
       const speed = 2.6 + Math.floor(scoreLocal / 5) * 0.7;
+      setTime((Date.now() - st.start) / 1000);
 
       // 2D-движение: плавно тянемся к цели по обеим осям
       const px = st.x;
@@ -97,8 +133,7 @@ export default function RocketGame() {
         }
         const overlapX = rR > o.x && rL < o.x + OBST_W;
         if (overlapX && (rT < o.gapY || rB > o.gapY + GAP_H)) {
-          setStatus("over");
-          toast.error(`Разбились! Счёт: ${scoreLocal}`);
+          finish();
           return;
         }
       }
@@ -161,6 +196,7 @@ export default function RocketGame() {
       >
         <div className={styles.gameHud}>
           <span>Счёт: {score}</span>
+          <span>⏱ {fmt(time)}</span>
           <span>Уровень: {level}</span>
         </div>
 
@@ -202,7 +238,21 @@ export default function RocketGame() {
             {status === "over" ? (
               <>
                 <h2 style={{ margin: 0 }}>💥 Игра окончена</h2>
-                <p style={{ margin: 0 }}>Счёт: {score} · уровень {level}</p>
+                <p style={{ margin: 0 }}>
+                  Счёт: {score} · продержался {fmt(time)}
+                  {board.place ? ` · место #${board.place}` : ""}
+                </p>
+                {board.top.length > 0 && (
+                  <ol className={styles.leaderboard}>
+                    {board.top.map((r, i) => (
+                      <li key={r.date} className={board.place === i + 1 ? styles.lbYou : undefined}>
+                        <span>#{i + 1}</span>
+                        <span>{r.score} очк.</span>
+                        <span>{fmt(r.time)}</span>
+                      </li>
+                    ))}
+                  </ol>
+                )}
               </>
             ) : (
               <h2 style={{ margin: 0 }}>Готов лететь?</h2>
