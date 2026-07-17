@@ -1,3 +1,12 @@
+@import "tailwindcss";
+
+/* Учим Tailwind нашей теме.
+   По умолчанию dark: в Tailwind v4 = системная тема (prefers-color-scheme).
+   А у нас тема — класс на <body> (App.jsx: document.body.className = theme -> body.dark).
+   Переопределяем: dark: срабатывает, когда элемент внутри .dark (т.е. body.dark).
+   Теперь в любом компоненте пишем dark:text-white / dark:bg-slate-900 и всё. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   margin: 0;
   transition: background-color 0.3s, color 0.3s;

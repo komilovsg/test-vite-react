@@ -10,6 +10,8 @@ import HomePage from "./components/HomePage";
 import RouterGuide from "./components/RouterGuide";
 import ZustandGuide from "./components/ZustandGuide";
 import I18nGuide from "./components/I18nGuide";
+import ThemeGuide from "./components/ThemeGuide";
+import TailwindThemeGuide from "./components/TailwindThemeGuide";
 import TodoGuide from "./todo/TodoGuide";
 import TodoLayout from "./todo/TodoLayout";
 import TodoList from "./todo/TodoList";
@@ -39,6 +41,8 @@ function App() {
         <Route path="/router" element={<RouterGuide />} />
         <Route path="/zustand" element={<ZustandGuide />} />
         <Route path="/i18n" element={<I18nGuide />} />
+        <Route path="/theme" element={<ThemeGuide />} />
+        <Route path="/theme-tw" element={<TailwindThemeGuide />} />
         <Route path="/todo" element={<TodoGuide />} />
         <Route path="/todo/app" element={<TodoLayout />}>
           <Route index element={<TodoList />} />
