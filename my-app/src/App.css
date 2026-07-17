@@ -94,7 +94,39 @@
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+  margin-left: auto;
 }
+
+/* --- Шторка «Страницы» --- */
+.menu { position: relative; }
+.menu__btn { width: auto; padding: 0 12px; gap: 6px; white-space: nowrap; }
+
+/* прозрачный слой на весь экран: клик мимо панели закрывает шторку */
+.menu__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.menu__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.menu__panel .nav__link { padding: 10px 12px; }
 
 .icon-btn {
   width: 40px;

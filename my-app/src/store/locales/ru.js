@@ -18,6 +18,10 @@ export default {
     navZustand: "Zustand",
     navI18n: "i18n",
     navTodo: "Todo",
+    navTheme: "Тема (CSS)",
+    navThemeTw: "Тема (Tailwind)",
+    navMotion: "Motion ✨",
+    menu: "Страницы",
 
     routerTitle: "React Router — по шагам",
     routerLead:

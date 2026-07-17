@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useAppStore } from "../store/useAppStore";
 import { translations } from "../store/Language";
+import Skeleton from "../components/Skeleton";
 import "../App.css";
 
 // TodoList — главный экран демо (дашборд): слева список + фильтр,
@@ -19,6 +21,24 @@ export default function TodoList() {
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
+  // Короткая имитация загрузки списка — показываем скелетон.
+  // ponytail: setTimeout вместо реального запроса; тут данные из localStorage.
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const id = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(id);
+  }, []);
+
+  const handleRemove = (id, titleText) => {
+    removeTodo(id);
+    toast(`Удалено: ${titleText}`);
+  };
+
+  const onToggle = (todo) => {
+    toggleTodo(todo.id);
+    if (!todo.done) toast.success(`Готово: ${todo.title}`);
+  };
+
   const visible = todos.filter((todo) =>
     filter === "active" ? !todo.done : filter === "done" ? todo.done : true
   );
@@ -35,6 +55,7 @@ export default function TodoList() {
     if (!value) return;
     addTodo(value);
     setTitle(""); // очищаем поле, остаёмся на дашборде
+    toast.success(`Добавлено: ${value}`);
   };
 
   return (
@@ -53,7 +74,17 @@ export default function TodoList() {
           ))}
         </div>
 
-        {visible.length === 0 ? (
+        {loading ? (
+          <ul className="todo-list" aria-busy="true">
+            {[0, 1, 2].map((i) => (
+              <li key={i} className="todo-item" style={{ gap: 12 }}>
+                <Skeleton width={20} height={20} radius={6} />
+                <Skeleton width={`${70 - i * 10}%`} height={14} />
+                <Skeleton width={60} height={12} style={{ marginLeft: "auto" }} />
+              </li>
+            ))}
+          </ul>
+        ) : visible.length === 0 ? (
           <div className="todo-empty">
             <p>{t.empty}</p>
             <button className="btn btn--primary" onClick={() => navigate("/todo/app/create")}>
@@ -68,7 +99,7 @@ export default function TodoList() {
                   <input
                     type="checkbox"
                     checked={todo.done}
-                    onChange={() => toggleTodo(todo.id)}
+                    onChange={() => onToggle(todo)}
                   />
                   <span className="todo-item__text">{todo.title}</span>
                 </label>
@@ -83,7 +114,7 @@ export default function TodoList() {
                     className="todo-del"
                     aria-label={t.delete}
                     title={t.delete}
-                    onClick={() => removeTodo(todo.id)}
+                    onClick={() => handleRemove(todo.id, todo.title)}
                   >
                     ✕
                   </button>

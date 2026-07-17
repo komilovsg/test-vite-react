@@ -1,21 +1,34 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAppStore } from "../store/useAppStore";
 import { translations } from "../store/Language";
 import "../App.css";
 
-// Header — «шапка» приложения. Навигация + кнопки темы и языка.
-// ZUSTAND: вместо useContext подписываемся на стор селектором useAppStore((s) => s.поле).
-// Каждый селектор берёт ровно один кусок стора — так компонент перерисуется
-// только когда именно это поле изменится.
+// Все страницы одним списком — рендерим и в шторке, и (если понадобится) где угодно.
+const NAV = [
+  { to: "/", end: true, key: "navHome" },
+  { to: "/about", key: "navAbout" },
+  { to: "/contact", key: "navContact" },
+  { to: "/router", key: "navRouter" },
+  { to: "/zustand", key: "navZustand" },
+  { to: "/i18n", key: "navI18n" },
+  { to: "/todo", key: "navTodo" },
+  { to: "/theme", key: "navTheme" },
+  { to: "/theme-tw", key: "navThemeTw" },
+  { to: "/motion", key: "navMotion" },
+];
+
+// Header — «шапка». Страниц много → ссылки уехали в выпадающую шторку.
 export default function Header() {
   const theme = useAppStore((s) => s.theme);
   const lang = useAppStore((s) => s.lang);
-  // Методы стора тоже берём селектором — это обычные функции, дёргаем их в onClick.
   const toggleTheme = useAppStore((s) => s.toggleTheme);
   const toggleLang = useAppStore((s) => s.toggleLang);
   const t = translations[lang];
 
-  // NavLink сам подставляет класс на активный маршрут
+  // open — открыта ли шторка. Закрываем при клике по ссылке и по фону.
+  const [open, setOpen] = useState(false);
+
   const linkClass = ({ isActive }) =>
     isActive ? "nav__link is-active" : "nav__link";
 
@@ -27,25 +40,53 @@ export default function Header() {
           <span className="brand__text">{t.appTitle}</span>
         </NavLink>
 
-        <nav className="nav">
-          <NavLink to="/" end className={linkClass}>{t.navHome}</NavLink>
-          <NavLink to="/about" className={linkClass}>{t.navAbout}</NavLink>
-          <NavLink to="/contact" className={linkClass}>{t.navContact}</NavLink>
-          <NavLink to="/router" className={linkClass}>{t.navRouter}</NavLink>
-          <NavLink to="/zustand" className={linkClass}>{t.navZustand}</NavLink>
-          <NavLink to="/i18n" className={linkClass}>{t.navI18n}</NavLink>
-          <NavLink to="/todo" className={linkClass}>{t.navTodo}</NavLink>
-          <a
-            className="nav__link"
-            href="https://preza-react-html-format.vercel.app/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t.slidesLink} ↗
-          </a>
-        </nav>
-
         <div className="header__actions">
+          {/* Кнопка-шторка со списком всех страниц */}
+          <div className="menu">
+            <button
+              className="icon-btn"
+              aria-label={t.menu}
+              title={t.menu}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+            >
+              ☰
+            </button>
+
+            {open && (
+              <>
+                {/* невидимый фон: клик мимо — закрыть */}
+                <button
+                  className="menu__backdrop"
+                  aria-label="close menu"
+                  onClick={() => setOpen(false)}
+                />
+                <nav className="menu__panel">
+                  {NAV.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.end}
+                      className={linkClass}
+                      onClick={() => setOpen(false)}
+                    >
+                      {t[item.key]}
+                    </NavLink>
+                  ))}
+                  <a
+                    className="nav__link"
+                    href="https://preza-react-html-format.vercel.app/"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setOpen(false)}
+                  >
+                    {t.slidesLink} ↗
+                  </a>
+                </nav>
+              </>
+            )}
+          </div>
+
           <button
             className="icon-btn"
             aria-label={theme === "light" ? t.themeToDark : t.themeToLight}
@@ -54,10 +95,7 @@ export default function Header() {
           >
             {theme === "light" ? "🌙" : "☀️"}
           </button>
-          <button
-            className="icon-btn icon-btn--text"
-            onClick={toggleLang}
-          >
+          <button className="icon-btn icon-btn--text" onClick={toggleLang}>
             {lang === "ru" ? "EN" : "RU"}
           </button>
         </div>

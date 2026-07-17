@@ -18,6 +18,10 @@ export default {
     navZustand: "Zustand",
     navI18n: "i18n",
     navTodo: "Todo",
+    navTheme: "Theme (CSS)",
+    navThemeTw: "Theme (Tailwind)",
+    navMotion: "Motion ✨",
+    menu: "Pages",
 
     routerTitle: "React Router — step by step",
     routerLead:

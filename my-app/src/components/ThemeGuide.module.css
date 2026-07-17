@@ -40,6 +40,30 @@
   color: #4338ca;
 }
 
+.button {
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  background: #4f46e5;
+  color: #ffffff;
+  transition: background 0.2s;
+}
+.button:hover {
+  background: #4338ca;
+}
+
+/* тёмная тема кнопки/бейджа этого компонента — тоже здесь */
+:global(body.dark) .button {
+  background: #8b8bff;
+  color: #16161f;
+}
+:global(body.dark) .button:hover {
+  background: #a5a5ff;
+}
+
 /* --- ТЁМНАЯ тема ЭТОГО компонента ---
    :global(body.dark) — глобальный класс body.dark, .card после него — локальный (хешированный).
    Читается так: "когда body тёмный, вот такой .card". */
