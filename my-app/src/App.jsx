@@ -14,6 +14,7 @@ import Loader from "./components/Loader";
 const AboutPage = lazy(() => import("./components/AboutPage"));
 const ContactPage = lazy(() => import("./components/ContactPage"));
 const RouterGuide = lazy(() => import("./components/RouterGuide"));
+const TsGuide = lazy(() => import("./components/TsGuide"));
 const ZustandGuide = lazy(() => import("./components/ZustandGuide"));
 const I18nGuide = lazy(() => import("./components/I18nGuide"));
 const ThemeGuide = lazy(() => import("./components/ThemeGuide"));
@@ -47,6 +48,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/router" element={<RouterGuide />} />
+            <Route path="/typescript" element={<TsGuide />} />
             <Route path="/zustand" element={<ZustandGuide />} />
             <Route path="/i18n" element={<I18nGuide />} />
             <Route path="/theme" element={<ThemeGuide />} />

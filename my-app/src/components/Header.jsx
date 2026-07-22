@@ -10,6 +10,7 @@ const NAV = [
   { to: "/about", key: "navAbout" },
   { to: "/contact", key: "navContact" },
   { to: "/router", key: "navRouter" },
+  { to: "/typescript", key: "navTs" },
   { to: "/zustand", key: "navZustand" },
   { to: "/i18n", key: "navI18n" },
   { to: "/todo", key: "navTodo" },

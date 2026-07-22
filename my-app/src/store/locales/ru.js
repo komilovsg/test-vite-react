@@ -15,6 +15,7 @@ export default {
     navAbout: "О проекте",
     navContact: "Контакты",
     navRouter: "Router",
+    navTs: "TypeScript",
     navZustand: "Zustand",
     navI18n: "i18n",
     navTodo: "Todo",
@@ -97,6 +98,92 @@ export default function Layout() {
 >
   О проекте
 </NavLink>`,
+      },
+    ],
+
+    tsTitle: "type или interface — по шагам",
+    tsLead:
+      "Один из самых частых вопросов на собеседовании. И type, и interface описывают форму объекта — в большинстве случаев работают одинаково. Разберём отличия и когда что выбирать.",
+    tsOutro:
+      "Простое правило: любой тип — type. Структура объекта (User, Product, ButtonProps) — можно и interface, и type. Главное — последовательность в проекте, а не выбор ключевого слова.",
+    tsSteps: [
+      {
+        n: "01",
+        title: "Оба описывают форму объекта",
+        text: "И interface, и type задают структуру объекта. В большинстве случаев они взаимозаменяемы — код ниже эквивалентен.",
+        code: `interface User {
+  name: string;
+  age: number;
+}
+
+// то же самое через type
+type User = {
+  name: string;
+  age: number;
+};`,
+      },
+      {
+        n: "02",
+        title: "Отличие №1 — declaration merging",
+        text: "interface можно объявить несколько раз — TypeScript автоматически объединит объявления в одно. С type так нельзя: повторное имя — ошибка.",
+        code: `interface User {
+  name: string;
+}
+interface User {
+  age: number;
+}
+// TS объединит → { name: string; age: number }
+
+type User = { name: string };
+type User = { age: number }; // ❌ Error: Duplicate identifier`,
+      },
+      {
+        n: "03",
+        title: "Отличие №2 — что можно описывать",
+        text: "interface — в основном для объектов. type умеет всё: union, tuple, примитивы, функции. Если нужен не объект — берём type.",
+        code: `// только type: объединения и примитивы
+type Theme = "light" | "dark";
+type ID = string | number;
+
+// tuple
+type Point = [number, number];
+
+// функция
+type Handler = (id: number) => void;`,
+      },
+      {
+        n: "04",
+        title: "Отличие №3 — наследование",
+        text: "interface наследуется через extends. type комбинируется через & (пересечение — «объединить поля»). Результат одинаковый.",
+        code: `interface Person {
+  name: string;
+}
+interface Employee extends Person {
+  salary: number;
+}
+
+// то же через type
+type Person = { name: string };
+type Employee = Person & { salary: number };`,
+      },
+      {
+        n: "05",
+        title: "Что используют на практике",
+        text: "Частое правило в командах: interface — для объектов, props React-компонентов и ответов API; type — для union, tuple, utility-типов и функций. Выбрали стиль — держитесь его во всём проекте.",
+        code: `// модели данных и props → interface
+interface User {
+  id: number;
+  name: string;
+}
+interface ButtonProps {
+  disabled: boolean;
+  onClick: () => void;
+}
+
+// union / примитивы / комбинации → type
+type Theme = "light" | "dark";
+type ID = string | number;
+type CardProps = User & { active: boolean };`,
       },
     ],
 

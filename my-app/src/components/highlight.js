@@ -3,7 +3,7 @@
 //           заменить на shiki/prism, если понадобится реальная токенизация.
 
 const KEYWORDS =
-  "import|from|export|default|function|return|const|let|var|new|if|else|for|while";
+  "import|from|export|default|function|return|const|let|var|new|if|else|for|while|interface|type|extends|implements";
 
 // сначала escape HTML, потом один общий regex — так keyword внутри строки/комментария не красится
 const escape = (s) =>

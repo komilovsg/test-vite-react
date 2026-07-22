@@ -15,6 +15,7 @@ export default {
     navAbout: "About",
     navContact: "Contact",
     navRouter: "Router",
+    navTs: "TypeScript",
     navZustand: "Zustand",
     navI18n: "i18n",
     navTodo: "Todo",
@@ -97,6 +98,92 @@ export default function Layout() {
 >
   About
 </NavLink>`,
+      },
+    ],
+
+    tsTitle: "type vs interface — step by step",
+    tsLead:
+      "One of the most common interview questions. Both type and interface describe the shape of an object — in most cases they work the same. Let's break down the differences and when to pick which.",
+    tsOutro:
+      "Simple rule: for any type — use type. For an object shape (User, Product, ButtonProps) — either works. What matters is consistency across the project, not the keyword you pick.",
+    tsSteps: [
+      {
+        n: "01",
+        title: "Both describe an object shape",
+        text: "Both interface and type define the structure of an object. In most cases they're interchangeable — the code below is equivalent.",
+        code: `interface User {
+  name: string;
+  age: number;
+}
+
+// same thing with type
+type User = {
+  name: string;
+  age: number;
+};`,
+      },
+      {
+        n: "02",
+        title: "Difference #1 — declaration merging",
+        text: "An interface can be declared multiple times — TypeScript merges the declarations into one. type can't: a duplicate name is an error.",
+        code: `interface User {
+  name: string;
+}
+interface User {
+  age: number;
+}
+// TS merges -> { name: string; age: number }
+
+type User = { name: string };
+type User = { age: number }; // Error: Duplicate identifier`,
+      },
+      {
+        n: "03",
+        title: "Difference #2 — what you can describe",
+        text: "interface is mainly for objects. type can do everything: unions, tuples, primitives, functions. If it's not an object — reach for type.",
+        code: `// only type: unions and primitives
+type Theme = "light" | "dark";
+type ID = string | number;
+
+// tuple
+type Point = [number, number];
+
+// function
+type Handler = (id: number) => void;`,
+      },
+      {
+        n: "04",
+        title: "Difference #3 — inheritance",
+        text: "interface inherits via extends. type combines via & (intersection — merge the fields). The result is the same.",
+        code: `interface Person {
+  name: string;
+}
+interface Employee extends Person {
+  salary: number;
+}
+
+// same with type
+type Person = { name: string };
+type Employee = Person & { salary: number };`,
+      },
+      {
+        n: "05",
+        title: "What's used in practice",
+        text: "Common team rule: interface for objects, React component props and API responses; type for unions, tuples, utility types and functions. Pick a style and stick to it across the whole project.",
+        code: `// data models and props -> interface
+interface User {
+  id: number;
+  name: string;
+}
+interface ButtonProps {
+  disabled: boolean;
+  onClick: () => void;
+}
+
+// union / primitives / combinations -> type
+type Theme = "light" | "dark";
+type ID = string | number;
+type CardProps = User & { active: boolean };`,
       },
     ],
 
