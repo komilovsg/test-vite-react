@@ -20,6 +20,7 @@ const I18nGuide = lazy(() => import("./components/I18nGuide"));
 const ThemeGuide = lazy(() => import("./components/ThemeGuide"));
 const TailwindThemeGuide = lazy(() => import("./components/TailwindThemeGuide"));
 const MotionGuide = lazy(() => import("./components/MotionGuide"));
+const VercelGuide = lazy(() => import("./components/VercelGuide"));
 const MotionDemoPage = lazy(() => import("./components/MotionDemoPage"));
 const RocketGame = lazy(() => import("./components/RocketGame"));
 const TodoGuide = lazy(() => import("./todo/TodoGuide"));
@@ -54,6 +55,7 @@ function App() {
             <Route path="/theme" element={<ThemeGuide />} />
             <Route path="/theme-tw" element={<TailwindThemeGuide />} />
             <Route path="/motion" element={<MotionGuide />} />
+            <Route path="/vercel" element={<VercelGuide />} />
             <Route path="/motion/game" element={<RocketGame />} />
             <Route path="/motion/:id" element={<MotionDemoPage />} />
             <Route path="/todo" element={<TodoGuide />} />

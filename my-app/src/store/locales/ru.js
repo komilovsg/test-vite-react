@@ -22,6 +22,7 @@ export default {
     navTheme: "Тема (CSS)",
     navThemeTw: "Тема (Tailwind)",
     navMotion: "Motion ✨",
+    navVercel: "Deploy 🚀",
     menu: "Страницы",
 
     routerTitle: "React Router — по шагам",
@@ -184,6 +185,78 @@ interface ButtonProps {
 type Theme = "light" | "dark";
 type ID = string | number;
 type CardProps = User & { active: boolean };`,
+      },
+    ],
+
+    vercelTitle: "Деплой на Vercel через GitHub — по шагам",
+    vercelLead:
+      "Vercel — хостинг для фронтенда. Схема простая: код на GitHub → Vercel сам собирает и выкладывает на боевой домен. Один раз связал репозиторий — дальше каждый push деплоится автоматически, без единой команды в терминале.",
+    vercelOutro:
+      "Итог: код на GitHub, вход в Vercel через GitHub, импорт репо, авто-настройки Vite, SPA-rewrite для глубоких ссылок — и авто-деплой на каждый push. Один раз настроил — дальше только git push.",
+    vercelSteps: [
+      {
+        n: "01",
+        title: "Залей код на GitHub",
+        text: "Vercel деплоит из Git-репозитория, поэтому проект сначала должен жить на GitHub. Если репо ещё нет — создай его на github.com и запушь ветку main. Есть уже — просто убедись, что последние коммиты на месте.",
+        code: `# один раз: привязать удалённый репозиторий
+git remote add origin https://github.com/USER/my-app.git
+
+git add .
+git commit -m "init"
+git push -u origin main`,
+      },
+      {
+        n: "02",
+        title: "Войди в Vercel через GitHub",
+        text: "Открой vercel.com → «Sign Up» / «Log In» → выбери «Continue with GitHub». Откроется окно GitHub — жмёшь «Authorize Vercel». GitHub отдаёт Vercel токен доступа (OAuth), отдельный пароль заводить не нужно — аккаунты связаны.",
+        code: `Vercel  →  Continue with GitHub
+        →  Authorize Vercel   (окно GitHub)
+        →  назад в Vercel, уже залогинен
+
+# пароль не нужен — вход по GitHub (OAuth)`,
+      },
+      {
+        n: "03",
+        title: "Import Project — выбери репозиторий",
+        text: "На дашборде жми «Add New… → Project». Vercel покажет список твоих GitHub-репозиториев. Найди нужный (my-app) и нажми «Import». Если репо не видно — «Adjust GitHub App Permissions» и дай доступ к репозиторию.",
+        code: `Dashboard → Add New… → Project
+  → список репозиториев GitHub
+  → my-app → Import
+
+# репо не в списке?
+# Adjust GitHub App Permissions → выдать доступ`,
+      },
+      {
+        n: "04",
+        title: "Настройки сборки — Vercel угадает сам",
+        text: "Для Vite Vercel определяет пресет автоматически: Framework = Vite, Build Command = «vite build», Output Directory = «dist». Менять почти никогда не нужно. Env-переменные (если есть) добавляешь здесь же. Жми «Deploy».",
+        code: `Framework Preset:   Vite        (авто)
+Build Command:      vite build  (авто)
+Output Directory:   dist        (авто)
+Install Command:    npm install (авто)
+
+→ Deploy`,
+      },
+      {
+        n: "05",
+        title: "SPA-rewrite — чтобы глубокие ссылки не давали 404",
+        text: "React Router рисует маршруты на клиенте. Но если открыть /todo напрямую или обновить страницу, сервер ищет файл /todo — его нет → 404. Решение: vercel.json в корне — любой путь отдаёт index.html, дальше роутер сам разбирается.",
+        code: `// vercel.json (в корне проекта)
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}`,
+      },
+      {
+        n: "06",
+        title: "Готово — дальше деплой автоматом",
+        text: "После первого деплоя Vercel связан с репо. Каждый push в main → авто-билд → обновление боевого домена. Push в другую ветку или PR → отдельный preview-URL, чтобы проверить до мержа. Терминал больше не нужен.",
+        code: `git push origin main      # → авто-деплой в прод
+git push origin feature   # → preview-URL для проверки
+
+# откат: в Vercel → Deployments → любой прошлый
+# билд → «Promote to Production»`,
       },
     ],
 

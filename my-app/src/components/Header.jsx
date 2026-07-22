@@ -17,6 +17,7 @@ const NAV = [
   { to: "/theme", key: "navTheme" },
   { to: "/theme-tw", key: "navThemeTw" },
   { to: "/motion", key: "navMotion" },
+  { to: "/vercel", key: "navVercel" },
 ];
 
 // Header — «шапка». Страниц много → ссылки уехали в выпадающую шторку.

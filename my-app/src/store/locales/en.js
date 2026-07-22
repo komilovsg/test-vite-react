@@ -22,6 +22,7 @@ export default {
     navTheme: "Theme (CSS)",
     navThemeTw: "Theme (Tailwind)",
     navMotion: "Motion ✨",
+    navVercel: "Deploy 🚀",
     menu: "Pages",
 
     routerTitle: "React Router — step by step",
@@ -184,6 +185,78 @@ interface ButtonProps {
 type Theme = "light" | "dark";
 type ID = string | number;
 type CardProps = User & { active: boolean };`,
+      },
+    ],
+
+    vercelTitle: "Deploy to Vercel via GitHub — step by step",
+    vercelLead:
+      "Vercel is a frontend host. The flow is simple: code on GitHub → Vercel builds it and ships to a production domain. Link the repo once and every push deploys automatically — no terminal commands after that.",
+    vercelOutro:
+      "Recap: code on GitHub, log in to Vercel with GitHub, import the repo, auto Vite settings, SPA rewrite for deep links — and auto-deploy on every push. Set it up once, then just git push.",
+    vercelSteps: [
+      {
+        n: "01",
+        title: "Push your code to GitHub",
+        text: "Vercel deploys from a Git repository, so the project must live on GitHub first. No repo yet? Create one on github.com and push the main branch. Already have one? Just make sure your latest commits are up there.",
+        code: `# once: attach the remote repository
+git remote add origin https://github.com/USER/my-app.git
+
+git add .
+git commit -m "init"
+git push -u origin main`,
+      },
+      {
+        n: "02",
+        title: "Log in to Vercel with GitHub",
+        text: "Open vercel.com → “Sign Up” / “Log In” → pick “Continue with GitHub”. A GitHub window opens — click “Authorize Vercel”. GitHub hands Vercel an access token (OAuth); no separate password — the accounts are linked.",
+        code: `Vercel  →  Continue with GitHub
+        →  Authorize Vercel   (GitHub window)
+        →  back in Vercel, already logged in
+
+# no password needed — login via GitHub (OAuth)`,
+      },
+      {
+        n: "03",
+        title: "Import Project — pick the repository",
+        text: "On the dashboard hit “Add New… → Project”. Vercel lists your GitHub repos. Find the one you need (my-app) and click “Import”. Repo not showing? Use “Adjust GitHub App Permissions” and grant access to it.",
+        code: `Dashboard → Add New… → Project
+  → list of GitHub repositories
+  → my-app → Import
+
+# repo not in the list?
+# Adjust GitHub App Permissions → grant access`,
+      },
+      {
+        n: "04",
+        title: "Build settings — Vercel guesses them",
+        text: "For Vite, Vercel detects the preset automatically: Framework = Vite, Build Command = “vite build”, Output Directory = “dist”. You rarely change anything. Add env variables (if any) right here. Then hit “Deploy”.",
+        code: `Framework Preset:   Vite        (auto)
+Build Command:      vite build  (auto)
+Output Directory:   dist        (auto)
+Install Command:    npm install (auto)
+
+→ Deploy`,
+      },
+      {
+        n: "05",
+        title: "SPA rewrite — so deep links don't 404",
+        text: "React Router draws routes on the client. But open /todo directly or refresh, and the server looks for a /todo file — none exists → 404. Fix: vercel.json at the root — every path serves index.html, then the router takes over.",
+        code: `// vercel.json (at the project root)
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}`,
+      },
+      {
+        n: "06",
+        title: "Done — deploys are automatic now",
+        text: "After the first deploy Vercel is linked to the repo. Every push to main → auto build → production domain updates. Push to another branch or open a PR → a separate preview URL to check before merge. No more terminal.",
+        code: `git push origin main      # → auto-deploy to prod
+git push origin feature   # → preview URL to review
+
+# rollback: Vercel → Deployments → any past
+# build → “Promote to Production”`,
       },
     ],
 
